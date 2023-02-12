@@ -38,7 +38,7 @@
                     "id": "676fbf32-9def-44b7-8582-56913d8d3719",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press",
                     "initialStateCheck": false
                 },
                 {
@@ -147,6 +147,15 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Toggle Cursor",
+                    "type": "Button",
+                    "id": "8721e8ab-fc84-455b-959e-69d8a172cfd9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
                     "initialStateCheck": false
                 }
             ],
@@ -330,7 +339,7 @@
                 {
                     "name": "negative",
                     "id": "b5fa5dcd-00e9-4243-bbd2-85fc5e580543",
-                    "path": "<Mouse>/scroll/down",
+                    "path": "<Mouse>/scroll/up",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard & Mouse",
@@ -341,7 +350,7 @@
                 {
                     "name": "positive",
                     "id": "0f87cec3-a05e-431f-8b04-c78d2a743452",
-                    "path": "<Mouse>/scroll/up",
+                    "path": "<Mouse>/scroll/down",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard & Mouse",
@@ -390,6 +399,17 @@
                     "processors": "",
                     "groups": "Keyboard & Mouse",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5f32d07a-8330-4db5-b228-14436fde20f7",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Toggle Cursor",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

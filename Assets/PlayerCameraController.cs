@@ -1,24 +1,24 @@
+using Cinemachine;
 using UnityEngine;
 
 public class PlayerCameraController : MonoBehaviour
 {
-	[SerializeField]
-	private Transform playerHead = null;
-
-	private Vector3 targetOffset = Vector3.zero;
-	private Vector3 targetLookOffset = Vector3.zero;
+	[SerializeField] private Camera playerCamera = null;
+	[SerializeField] private CinemachineFreeLook cinemachineController = null;
 
 	private void Start()
 	{
-		transform.SetParent(null, true);
-		targetOffset = transform.position - playerHead.position;
-		targetLookOffset = transform.eulerAngles;
+		playerCamera.transform.SetParent(null, true);
+		ToggleCursor();
 	}
 
-	private void LateUpdate()
+	public void ToggleCursor()
 	{
-		Vector3 offset = playerHead.TransformVector(targetOffset);
-		transform.position = Vector3.Lerp(transform.position, playerHead.position + offset, 10.0f * Time.deltaTime);
-		transform.eulerAngles = playerHead.eulerAngles + targetLookOffset;
+		Cursor.lockState = (Cursor.visible = !Cursor.visible) ? CursorLockMode.None : CursorLockMode.Locked;
+	}
+
+	public void OnZoomInput(float zoom)
+	{
+		cinemachineController.m_YAxis.m_InputAxisValue = zoom;
 	}
 }

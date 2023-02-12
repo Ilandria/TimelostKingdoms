@@ -7,6 +7,11 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private Transform playerRoot = null;
 	[SerializeField] private Transform playerHead = null;
 
+	[Header("Base Movement Stats")]
+	[SerializeField] private float moveForce = 15.0f;
+	[SerializeField] private float turnForce = 25.0f;
+	private float moveForceScale = 100.0f;
+
 	private Vector3 movementInput = Vector3.zero;
 	private bool sprintInput = false;
 	private bool crouchInput = false;
@@ -15,8 +20,8 @@ public class PlayerController : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		playerRigidbody.AddForce(playerRoot.TransformVector(movementInput) * 350.0f);
-		playerRigidbody.AddTorque(Vector3.Cross(playerRoot.forward, playerRoot.TransformVector(lookInput)) * 5.0f);
+		playerRigidbody.AddForce(playerRoot.TransformVector(movementInput) * moveForce * moveForceScale);
+		playerRigidbody.AddTorque(Vector3.Cross(playerRoot.forward, playerRoot.TransformVector(lookInput)) * turnForce);
 		jumpInput = false;
 	}
 
