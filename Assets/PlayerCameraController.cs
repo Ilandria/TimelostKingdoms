@@ -8,6 +8,7 @@ public class PlayerCameraController : MonoBehaviour
 
 	private void Start()
 	{
+		cinemachineController.transform.SetParent(null, true);
 		playerCamera.transform.SetParent(null, true);
 		ToggleCursor();
 	}
