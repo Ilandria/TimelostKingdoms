@@ -655,9 +655,6 @@ GameObject:
   - component: {fileID: 6113543665657904891}
   - component: {fileID: 6113543665657904888}
   - component: {fileID: 6113543665657904889}
-  - component: {fileID: 6113543665657904886}
-  - component: {fileID: 6113543665657904884}
-  - component: {fileID: 6113543665657904887}
   m_Layer: 0
   m_Name: Player Collider
   m_TagString: Untagged
@@ -722,71 +719,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.25
-  m_Center: {x: -0.15, y: 0.25, z: -0.15}
---- !u!135 &6113543665657904886
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6113543665657904890}
-  m_Material: {fileID: 13400000, guid: 2d097e9ead1c706439ff436e5d20189a, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.25
-  m_Center: {x: 0.15, y: 0.25, z: -0.15}
---- !u!135 &6113543665657904884
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6113543665657904890}
-  m_Material: {fileID: 13400000, guid: 2d097e9ead1c706439ff436e5d20189a, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.25
-  m_Center: {x: -0.15, y: 0.25, z: 0.15}
---- !u!135 &6113543665657904887
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6113543665657904890}
-  m_Material: {fileID: 13400000, guid: 2d097e9ead1c706439ff436e5d20189a, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.25
-  m_Center: {x: 0.15, y: 0.25, z: 0.15}
+  m_Radius: 0.4
+  m_Center: {x: 0, y: 0.4, z: 0}
 --- !u!1 &6113543666196627625
 GameObject:
   m_ObjectHideFlags: 0
@@ -1582,7 +1516,7 @@ Rigidbody:
   m_GameObject: {fileID: 6113543666472168435}
   serializedVersion: 4
   m_Mass: 75
-  m_Drag: 5
+  m_Drag: 0
   m_AngularDrag: 15
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -1614,11 +1548,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerRigidbody: {fileID: 6113543666472168432}
   playerRoot: {fileID: 6113543666472168398}
-  moveForce: 15
-  sprintBonus: 0.5
-  backwardMultiplier: 0.667
+  accelerationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 10
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 3
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.21014446
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  sprintMultiplier: 1.5
+  backwardMultiplier: 0.5
   turnForce: 15
-  jumpForce: 350
+  jumpForce: 250
 --- !u!1 &6113543666650939461
 GameObject:
   m_ObjectHideFlags: 0

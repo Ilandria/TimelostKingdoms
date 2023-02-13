@@ -8,8 +8,8 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private Transform playerRoot = null;
 
 	[Header("Base Movement Stats")]
-	[SerializeField] private float moveForce = 15.0f;
-	[SerializeField] private float sprintBonus = 0.67f;
+	[SerializeField] private AnimationCurve accelerationCurve;
+	[SerializeField] private float sprintMultiplier = 0.67f;
 	[SerializeField] private float backwardMultiplier = 0.33f;
 	[SerializeField] private float turnForce = 25.0f;
 	[SerializeField] private float jumpForce = 350.0f;
@@ -22,44 +22,42 @@ public class PlayerController : MonoBehaviour
 	private bool crouchInput = false;
 	private bool jumpInput = false;
 	private Vector3 lookInput = Vector2.zero;
-	private float groundedDrag = 0.0f;
-
-	private void Start()
-	{
-		groundedDrag = playerRigidbody.drag;
-	}
+	private bool isGrounded = false;
+	private readonly RaycastHit[] groundHitBuffer = new RaycastHit[1];
 
 	private void FixedUpdate()
 	{
-		// Todo: change this to non-allocating raycast.
-		if (Physics.Raycast(playerRoot.position + Vector3.up * 0.05f, Vector3.down, 0.1f))
+		// Todo: may need to add a layer mask - depends if jumping off of unintentional things is an issue.
+		isGrounded = Physics.RaycastNonAlloc(playerRoot.position + Vector3.up * 0.05f, Vector3.down, groundHitBuffer, 0.1f) > 0;
+
+		if (isGrounded)
 		{
-			playerRigidbody.drag = groundedDrag;
+			// These are the same on mouse * keyboard, but can be different on gamepad (since input vector isn't guaranteed to be normalized).
 			Vector3 worldMovementInput = playerRoot.TransformVector(movementInput);
+			Vector3 worldMovementInputNormalized = worldMovementInput.normalized;
 
 			// Make sprinting apply to forward movement only.
-			float sprintMovementBonus = 1.0f + Mathf.Clamp01(Vector3.Dot(worldMovementInput, playerRoot.forward)) * (sprintInput ? sprintBonus : 0.0f);
+			float sprintFactor = 1.0f + Mathf.Clamp01(Vector3.Dot(worldMovementInputNormalized, playerRoot.forward)) * (sprintInput ? (sprintMultiplier - 1.0f) : 0.0f);
 
 			// Movement penalty for backward movement.
-			float backwardMovementPenalty = 1.0f - Mathf.Clamp01(Vector3.Dot(worldMovementInput, -playerRoot.forward)) * (1.0f - backwardMultiplier);
+			float backwardFactor = 1.0f - Mathf.Clamp01(Vector3.Dot(worldMovementInputNormalized, -playerRoot.forward)) * (1.0f - backwardMultiplier);
 
-			// Total movement force.
-			float totalMoveForce = moveForce * sprintMovementBonus * backwardMovementPenalty;
+			// Used to determine if the player is trying to accelerate with or against current movement - against movement shouldn't be penalized as much. Aligned = 1, 90 deg. = 0.5, 180 deg. = 0
+			float velocityAlignment = Mathf.Clamp01(Vector3.Dot(worldMovementInputNormalized, playerRigidbody.velocity.normalized) * 0.5f + 0.5f);
 
-			playerRigidbody.AddForce(worldMovementInput * totalMoveForce * moveForceScale);
+			// Sample the acceleration curve to get the base force we should apply for the given current velocity.
+			float acceleration = accelerationCurve.Evaluate(playerRigidbody.velocity.magnitude * velocityAlignment / sprintFactor) * backwardFactor;
+
+			// Using non-normalized worldMovementInput here as gamepads provide continuous/analogue input instead of digital like keyboards.
+			playerRigidbody.AddForce(acceleration * moveForceScale * worldMovementInput);
 
 			if (jumpInput)
 			{
-				playerRigidbody.AddForce(Vector3.up * jumpForce * sprintMovementBonus * backwardMovementPenalty, ForceMode.Impulse);
+				playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 			}
-		}
-		else
-		{
-			playerRigidbody.drag = 0.0f;
 		}
 
 		playerRigidbody.AddTorque(Vector3.Cross(playerRoot.forward, playerRoot.TransformVector(lookInput)) * turnForce);
-
 		jumpInput = false;
 	}
 
@@ -86,7 +84,5 @@ public class PlayerController : MonoBehaviour
 	public void OnLookInput(Vector3 lookInput)
 	{
 		this.lookInput = lookInput;
-		// Todo: remove this.
-		this.lookInput.y = 0.0f;
 	}
 }
